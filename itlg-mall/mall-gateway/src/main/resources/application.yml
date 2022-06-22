@@ -1,0 +1,28 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: itlgmall-gateway
+  #配置nacos注册中心地址
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848  #注册中心地址
+        namespace: 80a98d11-492c-4008-85aa-32d889e9b0d0  #环境隔离
+
+    gateway:
+      discovery:
+        locator:
+          # 默认为false，设为true开启通过微服务创建路由的功能，即可以通过微服务名访问服务
+          enabled: true
+      # 是否开启网关
+      enabled: true
+      routes:
+        - id: itlgmall-member   #路由ID，全局唯一
+          uri: lb://itlgmall-member
+          predicates:
+            - Path=/member/**,/sso/**
+        - id: itlgmall-coupons
+          uri: lb://itlgmall-coupons
+          predicates:
+            - Path=/coupon/**
